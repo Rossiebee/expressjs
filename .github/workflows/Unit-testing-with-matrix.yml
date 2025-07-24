@@ -1,4 +1,4 @@
-name: Pipeline with Unit testing
+name: Matrix Pipeline with Unit testing 
 
 on:
   workflow_dispatch:
