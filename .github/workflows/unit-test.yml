@@ -1,0 +1,32 @@
+name: Pipeline with Unit testing
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - master
+
+jobs:
+    unit-testing:
+        name: Unit testing  
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Setup Node.js version
+          uses: actions/setup-node@v3
+          with:
+            node-version: 20
+
+        - name: Install Dependencies
+          run: npm install
+
+        - name: Run Unit tests  
+          run: npm test
+
+        - name: Archive Test Results
+          uses: actions/upload-artifact@v3
+          with:
+            name: Mocha-Test-Result
+            path: test-results.xml
