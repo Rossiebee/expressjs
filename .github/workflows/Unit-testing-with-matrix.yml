@@ -1,0 +1,40 @@
+name: Pipeline with Unit testing
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - master
+
+jobs:
+    unit-testing:
+        name: Unit testing
+        strategy:
+          matrix:
+            nodejs_version: [18, 19, 20]
+            os: [ubuntu-latest, macos-latest]
+            exclude:  
+              - nodejs_version: 18
+                os: macos-latest
+        runs-on: ${{ matrix.os }}
+
+        steps:
+        - name: Checkout Repositoty
+          uses: actions/checkout@v4
+
+        - name: Setup Node.js version - ${{matrix.nodejs_version}}
+          uses: actions/setup-node@v3
+          with:
+            node-version: ${{ matrix.nodejs_version }}
+
+        - name: Install Dependencies
+          run: npm install
+
+        - name: Run Unit Tests
+          run: npm test
+
+        - name: Archive Test Results
+          uses: actions/upload-artifact@v3
+          with:
+            name: Mocha-Test-Result
+            path: test-results.xml
